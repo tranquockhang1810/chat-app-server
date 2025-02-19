@@ -1,38 +1,61 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users.model");
-const fs = require("fs"); // Thêm để xóa file khi có lỗi
-const { validateMinLength } = require("../utils/ValidateModel");
-
+const { validateEmail, validateMinLength, validateLength, validateBirthDate } = require("../utils/ValidateModel");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Register controller
 exports.register = async (req, res, next) => {
-  let avatarPath = null;
   try {
     const { name, phone, email, birthDate, password } = req.body;
+    const avatar = req.file ? req.file.path : null;
 
-    // Nếu có file ảnh, lưu tạm thời
-    if (req.file) {
-      avatarPath = `uploads/${req.file.filename}`;
+    // Validate name
+    if (!name || validateMinLength(name, 3) === false) {
+      return res.status(400).json({
+        code: 400,
+        message: "Name should be at least 3 characters"
+      });
     }
 
-    // Check password
+    // Validate phone
+    if (!phone || validateLength(phone, 10) === false) {
+      return res.status(400).json({
+        code: 400,
+        message: "Phone should be exactly 10 characters"
+      });
+    }
+
+    // Validate email
+    if (!email || !validateEmail(email)) {
+      return res.status(400).json({
+        code: 400,
+        message: "Invalid email format"
+      });
+    }
+
+    // Validate password
     if (!password || validateMinLength(password, 8) === false) {
-      if (avatarPath) {
-        fs.unlinkSync(avatarPath); // Xóa ảnh
-      }
-      return next({ status: 400, message: "Password should be more than 8 characters" });
+      return res.status(400).json({
+        code: 400,
+        message: "Password should be at least 8 characters"
+      });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ phone });
-    if (existingUser) {
-      // Nếu user đã tồn tại, xóa ảnh vừa upload
-      if (avatarPath) {
-        fs.unlinkSync(avatarPath); // Xóa ảnh
-      }
-      return next({ status: 400, message: "User already exists" });
+    // Validate birthDate
+    if (!birthDate || !validateBirthDate(birthDate)) {
+      return res.status(400).json({
+        code: 400,
+        message: "Birth date should be in the past."
+      });
+    }
+
+    // Validate avatar
+    if (!req.file) {
+      return res.status(400).json({
+        code: 400,
+        message: "Avatar image is required"
+      });
     }
 
     // Hash password
@@ -40,14 +63,8 @@ exports.register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create new user
-    const user = new User({ name, phone, email, password: hashedPassword, avatar: avatarPath, birthDate });
+    const user = new User({ name, phone, email, password: hashedPassword, avatar, birthDate });
     await user.save();
-
-    // Nếu không có lỗi, lưu đường dẫn ảnh vào database
-    if (avatarPath) {
-      user.avatar = `/uploads/${req.file.filename}`;
-      await user.save();
-    }
 
     // Generate JWT token
     const accessToken = jwt.sign({ userId: user._id }, JWT_SECRET, {
@@ -61,7 +78,6 @@ exports.register = async (req, res, next) => {
           ...user._doc,
           id: user._id,
           _id: undefined,
-          avatar: process.env.BE_ENDPOINT + user.avatar,
           password: undefined,
           __v: undefined
         }
@@ -69,10 +85,6 @@ exports.register = async (req, res, next) => {
       message: "User registered successfully!"
     });
   } catch (error) {
-    // Nếu có lỗi, xóa ảnh đã upload
-    if (avatarPath) {
-      fs.unlinkSync(avatarPath); // Xóa ảnh
-    }
     next({ status: 500, message: error?.message });
   }
 };
@@ -106,7 +118,6 @@ exports.login = async (req, res, next) => {
           ...user._doc,
           id: user._id,
           _id: undefined,
-          avatar: process.env.BE_ENDPOINT + user.avatar,
           password: undefined,
           __v: undefined
         }

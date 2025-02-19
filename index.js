@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const swagger = require('./utils/swagger.js');
-const path = require("path");
 
 //ENV
 require('dotenv').config();
@@ -23,7 +22,6 @@ app.use(express.json());
 app.use(cors(corsOptionsDelegate));
 
 //routes
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(require("./routes/index"));
 
 //error handler

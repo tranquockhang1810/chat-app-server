@@ -11,7 +11,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'https://chat-app-server-2knp.onrender.com',
+      url: 'https://chat-app-server-sut5.onrender.com',
       description: 'Production server',
     },
     {
