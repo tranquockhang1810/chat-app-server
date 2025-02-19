@@ -10,10 +10,10 @@ const swaggerDefinition = {
     description: 'Design Pattern Assignment: APIs document of a chatting app',
   },
   servers: [
-    // {
-    //   url: 'https://tranquockhang-be-assm.onrender.com',
-    //   description: 'Production server',
-    // },
+    {
+      url: 'https://chat-app-server-2knp.onrender.com',
+      description: 'Production server',
+    },
     {
       url: 'http://localhost:8000',
       description: 'Development server',
