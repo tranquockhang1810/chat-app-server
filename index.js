@@ -7,7 +7,7 @@ const swagger = require('./utils/swagger.js');
 require('dotenv').config();
 
 //DATABASE
-require('./dbs/mongo.db.js');
+require('./db/mongo.db.js');
 
 // swagger
 swagger(app);
