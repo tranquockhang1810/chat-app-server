@@ -1,17 +1,16 @@
 const express = require("express");
-const { register, login } = require("../../controllers/user.controller");
-
+const { register, login } = require("../../controllers/auth.controller");
 const router = express.Router();
-const auth = require("../../middleware/auth");
 const upload = require("../../middleware/upload");
+const { validateRegister, validateLogin } = require("../../middleware/validate/auth.validate");
 
 //Login
 /**
  * @swagger
- * /api/v1/users/login:
+ * /api/v1/auth/login:
  *   post:
  *     summary: Login
- *     tags: [Users]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -32,15 +31,15 @@ const upload = require("../../middleware/upload");
  *         description: Server error
  * 
  */
-router.post("/login", login);
+router.post("/login", validateLogin, login);
 
 //Register
 /**
  * @swagger
- * /api/v1/users/register:
+ * /api/v1/auth/register:
  *   post:
  *     summary: Register
- *     tags: [Users]
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -69,7 +68,7 @@ router.post("/login", login);
  *       500:
  *         description: Server error
  */
-router.post("/register", upload.single("avatar"), register);
+router.post("/register", upload.single("avatar"), validateRegister, register);
 
 
 module.exports = router;

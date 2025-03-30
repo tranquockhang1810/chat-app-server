@@ -19,6 +19,7 @@ var corsOptionsDelegate = function (req, callback) {
 }
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptionsDelegate));
 
 //routes
@@ -26,13 +27,13 @@ app.use(require("./routes/index"));
 
 //error handler
 app.use((err, req, res, next) => {
-  const error = err.message ? err.message : err;
-  const status = err.status ? err.status : 500;
+  const status = err.status || 500;
+  const message = err.message || "Internal Server Error";
 
   return res.status(status).json({
     error: {
       code: status,
-      message: error
+      message: message
     }
   });
 });
