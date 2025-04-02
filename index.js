@@ -9,6 +9,9 @@ require('dotenv').config();
 //DATABASE
 require('./dbs/mongo.db.js');
 
+//FIREBASE
+require('./config/firebase.js');
+
 // swagger
 swagger(app);
 

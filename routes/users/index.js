@@ -1,5 +1,6 @@
 const express = require("express");
 const { register, login } = require("../../controllers/user.controller");
+const { sendNotification } = require("../../controllers/notification.controller");
 
 const router = express.Router();
 const auth = require("../../middleware/auth");
@@ -70,6 +71,35 @@ router.post("/login", login);
  *         description: Server error
  */
 router.post("/register", upload.single("avatar"), register);
+//Notification
+/**
+ * @swagger
+ * /api/v1/users/notification:
+ *   post:
+ *     summary: Send notification
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *               body:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Notification sent successfully
+ *       400:
+ *         description: Token, title and body are required
+ *       500:
+ *         description: Error sending notification
+ */
+router.post("/notification", sendNotification);
 
 
 module.exports = router;
