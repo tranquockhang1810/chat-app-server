@@ -1,17 +1,41 @@
 const User = require("../models/users.model");
 
 class UserRepository {
-  async createUser(data) {
+  static async createUser(data) {
     return await User.create(data);
   }
 
-  async findUserByPhone(phone) {
+  static async findUserByPhone(phone) {
     return await User.findOne({ phone });
   }
 
-  async findUserById(id) {
-    return await User.findById(id);
+  static async findUserById(id) {
+    return await User.findById(id).lean();
+  }
+
+  static async userExists(id) {
+    return await User.exists({ _id: id });
+  }
+
+  static async searchUsers(keyword, limit = 10, skip = 0) {
+    const query = {
+      $or: [
+        { name: { $regex: keyword, $options: "i" } }, // Tìm theo tên (không phân biệt hoa thường)
+        { phone: { $regex: keyword, $options: "i" } } // Tìm theo số điện thoại
+      ],
+    };
+
+    const [users, total] = await Promise.all([
+      User.find(query)
+        .limit(limit)
+        .skip(skip)
+        .select("name phone avatar")
+        .lean(),
+      User.countDocuments(query),
+    ]);
+
+    return { users, total };
   }
 }
 
-module.exports = new UserRepository();
+module.exports = UserRepository;

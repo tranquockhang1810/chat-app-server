@@ -4,6 +4,7 @@ const {
   validateMinLength,
   validateBirthDate
 } = require("../../utils/ValidateModel");
+const ALLOWED_IMAGE_TYPES = require("../../consts/ImagesAllowedType");
 
 const validateRegister = (req, res, next) => {
   const { name, phone, email, birthDate, password } = req.body;
@@ -32,9 +33,8 @@ const validateRegister = (req, res, next) => {
   if (!avatar) {
     return next({ status: 400, message: "Avatar image is required" });
   }
-
-  const allowedFormats = ["image/jpeg", "image/png", "image/jpg"];
-  if (!allowedFormats.includes(avatar.mimetype)) {
+  
+  if (!ALLOWED_IMAGE_TYPES.includes(avatar.mimetype)) {
     return next({ status: 400, message: "Invalid avatar format. Only JPG, JPEG, and PNG are allowed." });
   }
 

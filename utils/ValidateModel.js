@@ -29,10 +29,28 @@ const validateBirthDate = (birthDate) => {
   return formattedDate <= today;
 };
 
+const validatePagination = (req, res, next) => {
+  let { page, limit } = req.query;
+
+  page = parseInt(page, 10);
+  limit = parseInt(limit, 10);
+
+  if (isNaN(page) || page < 1) {
+    return next({ status: 400, message: "Page must be a positive integer" });
+  }
+
+  if (isNaN(limit) || limit < 1 || limit > 100) {
+    return next({ status: 400, message: "Limit must be between 1 and 100" });
+  }
+
+  next();
+};
+
 module.exports = {
   validateEmail,
   validateLength,
   validateMinLength,
   validateMaxLength,
-  validateBirthDate
+  validateBirthDate,
+  validatePagination
 }

@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const UserRepository = require("../repositories/user.repository");
 const TokenService = require("./token.service");
-const AvatarService = require("./avatar.service");
+const UploadService = require("./upload.service");
 
 class AuthService {
   async register(userData) {
@@ -11,7 +11,7 @@ class AuthService {
 
     let avatarUrl = "";
     if (avatar) {
-      avatarUrl = await AvatarService.uploadToCloudinary(avatar.buffer, avatar.originalname);
+      avatarUrl = await UploadService.uploadToCloudinary(avatar.buffer, avatar.originalname);
     }
 
     const user = await UserRepository.createUser({
