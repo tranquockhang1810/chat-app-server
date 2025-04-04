@@ -13,7 +13,7 @@ class FirebaseNotificationStrategy extends NotificationStrategy {
       notification: {
         title: notificationData.sender.name,
         body: notificationData.type === "text" ? notificationData.content : "Has sent images",
-        image: notificationData.sender.avatar,
+        imageUrl: notificationData.sender.avatar,
       }
     };
 

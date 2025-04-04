@@ -56,13 +56,6 @@ const initializeSocket = (server) => {
           break;
         }
       }
-
-      if (disconnectedUserId) {
-        const isStillOnline = [...onlineUsers.keys()].includes(disconnectedUserId);
-        if (!isStillOnline) {
-          await UserService.removeFCMToken(disconnectedUserId);
-        }
-      }
     });
   });
 };
