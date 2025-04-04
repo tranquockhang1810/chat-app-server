@@ -40,15 +40,15 @@ class UserRepository {
   static async updateFCMToken(userId, token) {
     return await User.findByIdAndUpdate(
       userId,
-      { $addToSet: { fcmTokens: token } },
+      { fcmToken: token },
       { new: true }
     );
   }
 
-  static async removeFCMToken(userId, token) {
+  static async removeFCMToken(userId) {
     return await User.findByIdAndUpdate(
       userId,
-      { $pull: { fcmTokens: token } },
+      { fcmToken: "" },
       { new: true }
     );
   }

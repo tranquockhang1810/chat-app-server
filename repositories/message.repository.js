@@ -6,7 +6,8 @@ class MessageRepository {
       throw new Error("Message type is required");
     }
 
-    return await Message.create(messageData);
+    return (await Message.create(messageData))
+      .populate("sender", "avatar name");
   }
 
   static async getMessages(chatId, skip, limit) {

@@ -7,15 +7,14 @@ class NotificationHandler {
   static async sendMessageNotification(io, onlineUsers, messageData) {
     const notificationService = new NotificationService(
       new SocketNotificationStrategy(io, onlineUsers),
-      // new FirebaseNotificationStrategy()
+      new FirebaseNotificationStrategy()
     );
-
-    const userExists = await UserService.getUserById(messageData.sender);
+    const userExists = await UserService.getUserById(messageData.receiver);
     if (!userExists) return;
-    
+
     await notificationService.send(messageData.receiver, {
       ...messageData,
-      fcmToken: userExists.fcmTokens,
+      fcmToken: userExists.fcmToken,
     });
   }
 }

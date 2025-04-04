@@ -11,10 +11,10 @@ class FirebaseNotificationStrategy extends NotificationStrategy {
     const message = {
       token: notificationData.fcmToken,
       notification: {
-        title: notificationData.title,
-        body: notificationData.body,
-      },
-      data: notificationData.data || {},
+        title: notificationData.sender.name,
+        body: notificationData.type === "text" ? notificationData.content : "Has sent images",
+        image: notificationData.sender.avatar,
+      }
     };
 
     try {
