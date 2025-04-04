@@ -15,9 +15,7 @@ class ChatFacade {
 
   static async sendMessage(messageData) {
     try {
-      console.log("messageData", messageData);
-      
-      let { chatId, sender, content, images } = messageData;
+      let { chatId, sender, content, images, receiver } = messageData;
       const messageType = MessageService.determineMessageType(messageData);
       const savedMessage = await MessageService.saveMessage({
         chatId,
@@ -26,11 +24,26 @@ class ChatFacade {
         images,
         type: messageType,
       });
-      await ChatService.updateChatLastMessage(chatId, savedMessage.content || `Has sent ${images.length} image${images.length > 1 ? "s" : ""}`);
+      await ChatService.updateChatLastMessage(
+        chatId, 
+        savedMessage.content || `Has sent ${images.length} image${images.length > 1 ? "s" : ""}`,
+        sender,
+        receiver
+      );
 
       return savedMessage;
     } catch (error) {
       console.error("Error in ChatFacade.sendMessage:", error.message);
+      throw error;
+    }
+  }
+
+  static async seenChat(chatId, userId) {
+    try {
+      const updatedChat = await ChatService.seenChat(chatId, userId);
+      return updatedChat;
+    } catch (error) {
+      console.error("Error in ChatFacade.seenChat:", error.message);
       throw error;
     }
   }

@@ -13,6 +13,14 @@ class UserService {
     const skip = (page - 1) * limit;
     return await UserRepository.searchUsers(keyword, limit, skip);
   }
+
+  static async updateFCMToken(userId, token) {
+    return await UserRepository.updateFCMToken(userId, token);
+  }
+
+  static async removeFCMToken(userId, token) {
+    return await UserRepository.removeFCMToken(userId, token);
+  }
 }
 
 module.exports = UserService;
