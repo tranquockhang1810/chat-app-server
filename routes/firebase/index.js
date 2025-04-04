@@ -8,7 +8,7 @@ const { sendNotification } = require("../../controllers/notification.controller"
  * /api/v1/users/notification:
  *   post:
  *     summary: Send notification
- *     tags: [Users]
+ *     tags: [Firebase]
  *     requestBody:
  *       required: true
  *       content:

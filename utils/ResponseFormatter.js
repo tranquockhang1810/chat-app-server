@@ -33,8 +33,8 @@ class ResponseFormatter {
       data: items,
       paging: {
         total,
-        page,
-        limit,
+        page: parseInt(page),
+        limit: parseInt(limit),
         totalPages: Math.ceil(total / limit),
       },
     };

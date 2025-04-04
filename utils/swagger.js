@@ -5,18 +5,18 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
-    title: 'Trần Quốc Khang - TRẦN THỊ THANH PHƯƠNG - DESIGN PATTERN ASSIGNMENT',
+    title: 'TRẦN QUÓC KHANG - TRẦN THỊ THANH PHƯƠNG - DESIGN PATTERN ASSIGNMENT',
     version: '1.0.0',
     description: 'Design Pattern Assignment: APIs document of a chatting app',
   },
   servers: [
     {
-      url: 'https://chat-app-server-sut5.onrender.com',
-      description: 'Production server',
-    },
-    {
       url: 'http://localhost:8000',
       description: 'Development server',
+    },
+    {
+      url: 'https://chat-app-server-sut5.onrender.com',
+      description: 'Production server',
     },
   ],
   components: {
