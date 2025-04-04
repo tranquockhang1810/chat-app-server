@@ -36,6 +36,22 @@ class UserRepository {
 
     return { users, total };
   }
+
+  static async updateFCMToken(userId, token) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { fcmTokens: token } },
+      { new: true }
+    );
+  }
+
+  static async removeFCMToken(userId, token) {
+    return await User.findByIdAndUpdate(
+      userId,
+      { $pull: { fcmTokens: token } },
+      { new: true }
+    );
+  }
 }
 
 module.exports = UserRepository;

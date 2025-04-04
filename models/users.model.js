@@ -45,6 +45,10 @@ const userSchema = new Schema({
   avatar: {
     type: String,
     required: true
+  },
+  fcmTokens: {
+    type: [String],
+    default: []
   }
 }, { timestamps: true });
 

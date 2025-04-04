@@ -18,8 +18,20 @@ class ChatService {
     return { chats, total };
   }
 
-  static async updateChatLastMessage(chatId, lastMessage) {
-    return await ChatRepository.updateChat(chatId, lastMessage);
+  static async updateChatLastMessage(chatId, lastMessage, senderId, receiverId) {
+    return await ChatRepository.updateChat(chatId, lastMessage, senderId, receiverId);
+  }
+
+  static async seenChat(chatId, userId) {
+    return await ChatRepository.seenChat(chatId, userId);
+  }
+
+  static async isUserInChat(chatId, userId) {
+    return await ChatRepository.isUserInChat(chatId, userId);
+  }
+
+  static async getChatById(chatId) {
+    return await ChatRepository.getChatById(chatId);
   }
 }
 
