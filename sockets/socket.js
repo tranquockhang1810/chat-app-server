@@ -36,6 +36,7 @@ const initializeSocket = (server) => {
 
       const savedMessage = await ChatHandler.handleSendMessage(messageData);
       await NotificationHandler.sendMessageNotification(io, onlineUsers, { ...savedMessage._doc, receiver: messageData.receiver });
+      socket.emit("send-success", { ...savedMessage._doc, receiver: messageData.receiver });
     });
 
     socket.on("seen-chat", async (data) => {
